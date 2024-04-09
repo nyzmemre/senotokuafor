@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:senotokuafor/product/widgets/my_scaffold.dart';
+import 'package:kartal/kartal.dart';
+import '../../product/widgets/my_scaffold.dart';
+import 'add_product_view.dart';
 
 class ProductView extends StatelessWidget {
   const ProductView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(child: ListView(
-      children: List.generate(15, (index) => Card(
-        color: Colors.amberAccent,
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
+    return MyScaffold(
+        appBar: AppBar(
+          title: Text('Ürünler'),
+          actions: [
+            IconButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_)=>AddProductView()));
+            }, icon: Icon(Icons.add_circle))
+          ],
+        ),
+        child: ListView(
+      children: List.generate(15, (index) => Padding(
+        padding: context.padding.low,
+        child: Card(
+          color: Colors.amberAccent,
           child: ListTile(
-            leading: Text('Ürün Kodu', style: TextStyle(fontSize: 20),),
+            leading: Text('Ürün Kodu', style: TextStyle(fontSize: 15),),
             title: Text('Ürün Adı'),
             subtitle: Row(
               children: [
