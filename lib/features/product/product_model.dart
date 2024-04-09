@@ -1,23 +1,30 @@
-class Product {
+import 'package:hive_flutter/adapters.dart';
+part 'product_model.g.dart';
+@HiveType(typeId: 1)
+class ProductModel {
+  @HiveField(0)
   String productID;
+  @HiveField(1)
   String productName;
+  @HiveField(2)
   int productNum;
+  @HiveField(3)
   String productDetail;
 
-  Product({
+  ProductModel({
    required this.productID,
    required this.productName,
    required this.productNum,
    required this.productDetail,
   });
 
-  Product copyWith({
+  ProductModel copyWith({
     required String productID,
     required String productName,
     required int productNum,
     required String productDetail,
   }) {
-    return Product(
+    return ProductModel(
       productID: productID,
       productName: productName,
       productNum: productNum,
@@ -34,8 +41,8 @@ class Product {
     };
   }
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
       productID: json['productID'] as String,
       productName: json['productName'] as String,
       productNum: json['productNum'] as int,
@@ -54,7 +61,7 @@ class Product {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Product &&
+          other is ProductModel &&
               runtimeType == other.runtimeType &&
               productID == other.productID &&
               productName == other.productName &&
