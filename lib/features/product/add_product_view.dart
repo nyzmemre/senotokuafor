@@ -51,16 +51,18 @@ class AddProductView extends StatelessWidget {
             ),
             context.sized.emptySizedHeightBoxNormal,
             ElevatedButton(onPressed: () async {
-              print(productCodeController.text);
-              print(productNameController.text);
-              print(productNumController.text);
-              print(productDetailController.text);
-              await Hive.box<ProductModel>(TextConstant.productBox).put(
-                  productCodeController.text, ProductModel(
-                  productID: productCodeController.text,
-                  productName: productNameController.text,
-                  productNum: int.parse(productNumController.text),
-                  productDetail: productDetailController.text ?? ''));
+              var val=  Hive.box<ProductModel>(TextConstant.productBox).get(productCodeController.text);
+              if(val?.productID==productCodeController.text){
+                print('Aynı üründen var dayı');
+              } else {
+                await Hive.box<ProductModel>(TextConstant.productBox).put(
+                    productCodeController.text, ProductModel(
+                    productID: productCodeController.text,
+                    productName: productNameController.text,
+                    productNum: int.parse(productNumController.text),
+                    productDetail: productDetailController.text ?? ''));
+              }
+
             }, child: const Text(TextConstant.addProduct))
 
           ],
