@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+import '../../../features/product/product_model.dart';
 import '../constants/text_constant.dart';
 
 @immutable
@@ -24,6 +26,12 @@ class TextFormValidator {
     return null;
   }
 
+  static String? validateProductCodeExist(String? value, TextEditingController? controller){
+    var val=  Hive.box<ProductModel>(TextConstant.productBox).get(controller?.text);
+    if(val?.productID==controller?.text){
+      return 'Bu ürün kodu kullanıldı';
+    } return null;
+  }
   ///email adresinin doğruluğunu kontrol ediyor.
   static String? validateEmail(String? value) {
     if(value != null && (!value.contains('@') || !value.contains('.com'))){

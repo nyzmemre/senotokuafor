@@ -10,7 +10,9 @@ import '../../product/widgets/my_scaffold.dart';
 import 'add_product_view.dart';
 
 class ProductView extends StatelessWidget {
-  const ProductView({Key? key}) : super(key: key);
+   ProductView({Key? key}) : super(key: key);
+   final _key=GlobalKey<FormState>();
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,63 +27,90 @@ class ProductView extends StatelessWidget {
               if (productList.isEmpty) {
                 return productNotFount(context);
               }
-              return ListView.builder(
-                  itemCount: productList.length,
-                  itemBuilder: (context, int index) {
-                    return Card(
-                      color: Colors.amberAccent,
-                      child: ListTile(
-                        leading: Text(
-                          productList[index].productID,
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        title: Text(productList[index].productName),
-                        subtitle: Row(
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                 /* Provider.of<ProductViewModel>(context).increaseProductNum(productList[index]);*/
-                                  print(productList[index].productNum);
-                                  productList[index].productNum--;
-                                  boxData.putAt(
-                                      index,
-                                      ProductModel(
-                                          productID:
-                                              productList[index].productID,
-                                          productName: productList[index].productName,
-                                          productNum: productList[index].productNum,
-                                          productDetail: productList[index].productDetail));
-                                },
-                                child: Text(
-                                  '-',
-                                  style: TextStyle(fontSize: 35),
-                                )),
-                            Text(productList[index].productNum.toString()),
-                            TextButton(
-                                onPressed: () {
-                                  print(productList[index].productNum);
-                                  productList[index].productNum++;
-                                  boxData.putAt(
-                                      index,
-                                      ProductModel(
-                                          productID:
-                                          productList[index].productID,
-                                          productName: productList[index].productName,
-                                          productNum: productList[index].productNum,
-                                          productDetail: productList[index].productDetail));                                },
-                                child: Text(
-                                  '+',
-                                  style: TextStyle(fontSize: 25),
-                                )),
+              return Form(
+                key: _key,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: searchController,
+                      onChanged: (val){
+                        if(val.isNotEmpty){
 
-                          ],
-                        ),
-                        trailing: IconButton(onPressed: (){
-                          boxData.deleteAt(index);
-                        }, icon: Icon(Icons.delete)),
-                      ),
-                    );
-                  });
+                           if(boxData.keys.any((element) => element==searchController.text)){
+                             ProductModel _result=boxData.get(searchController.text)!;
+                             productList=[ProductModel(productID: _result.productID, productName: _result.productName, productNum: _result.productNum, productDetail: _result.productDetail)];
+                           }else{
+                             productList=[];
+
+                          }
+                        } else {
+                          productList=boxData.values.cast<ProductModel>().toList();
+                        }
+
+                      },
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: productList.length,
+                        itemBuilder: (context, int index) {
+                          return Card(
+                            color: Colors.amberAccent,
+                            child: ListTile(
+                              leading: Text(
+                                productList[index].productID,
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              title: Text(productList[index].productName),
+                              subtitle: Row(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                       /* Provider.of<ProductViewModel>(context).increaseProductNum(productList[index]);*/
+                                        print(productList[index].productNum);
+                                        productList[index].productNum--;
+                                        boxData.putAt(
+                                            index,
+                                            ProductModel(
+                                                productID:
+                                                    productList[index].productID,
+                                                productName: productList[index].productName,
+                                                productNum: productList[index].productNum,
+                                                productDetail: productList[index].productDetail));
+                                      },
+                                      child: Text(
+                                        '-',
+                                        style: TextStyle(fontSize: 35),
+                                      )),
+                                  Text(productList[index].productNum.toString()),
+                                  TextButton(
+                                      onPressed: () {
+                                        print(productList[index].productNum);
+                                        productList[index].productNum++;
+                                        boxData.putAt(
+                                            index,
+                                            ProductModel(
+                                                productID:
+                                                productList[index].productID,
+                                                productName: productList[index].productName,
+                                                productNum: productList[index].productNum,
+                                                productDetail: productList[index].productDetail));                                },
+                                      child: Text(
+                                        '+',
+                                        style: TextStyle(fontSize: 25),
+                                      )),
+
+                                ],
+                              ),
+                              trailing: IconButton(onPressed: (){
+                                boxData.deleteAt(index);
+                              }, icon: Icon(Icons.delete)),
+                            ),
+                          );
+                        }),
+                  ],
+                ),
+              );
             }));
   }
 

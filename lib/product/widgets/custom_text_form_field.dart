@@ -56,6 +56,7 @@ class CustomTextFormField extends StatelessWidget {
               (value) {
             return TextFormValidator.validateNotEmpty(value, labelText) ??
                 TextFormValidator.checkPasswordLenght(value, labelText) ??
+                TextFormValidator.validateProductCodeExist(value, controller) ??
                 (labelText == TextConstant.mailAdress
                     ? TextFormValidator.validateEmail(value)
                     : null);
