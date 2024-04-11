@@ -54,64 +54,76 @@ class ProductView extends StatelessWidget {
                         physics: ScrollPhysics(),
                         itemCount: productList.length,
                         itemBuilder: (context, int index) {
-                          return Card(
-                            color: Colors.amberAccent,
-                            child: ListTile(
-                              leading: Text(
-                                productList[index].productID,
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              title: Text(productList[index].productName),
-                              subtitle: Row(
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                       /* Provider.of<ProductViewModel>(context).increaseProductNum(productList[index]);*/
-                                        print(productList[index].productNum);
-                                        productList[index].productNum--;
-                                        boxData.putAt(
-                                            index,
-                                            ProductModel(
-                                                productID:
-                                                    productList[index].productID,
-                                                productName: productList[index].productName,
-                                                productNum: productList[index].productNum,
-                                                productDetail: productList[index].productDetail));
-                                      },
-                                      child: Text(
-                                        '-',
-                                        style: TextStyle(fontSize: 35),
-                                      )),
-                                  Text(productList[index].productNum.toString()),
-                                  TextButton(
-                                      onPressed: () {
-                                        print(productList[index].productNum);
-                                        productList[index].productNum++;
-                                        boxData.putAt(
-                                            index,
-                                            ProductModel(
-                                                productID:
-                                                productList[index].productID,
-                                                productName: productList[index].productName,
-                                                productNum: productList[index].productNum,
-                                                productDetail: productList[index].productDetail));                                },
-                                      child: Text(
-                                        '+',
-                                        style: TextStyle(fontSize: 25),
-                                      )),
-
-                                ],
-                              ),
-                              trailing: IconButton(onPressed: (){
-                                boxData.deleteAt(index);
-                              }, icon: Icon(Icons.delete)),
-                            ),
-                          );
+                          return cardWidget(productList, index, boxData);
                         }),
                   ],
                 ),
               );
             }));
+  }
+
+  Card cardWidget(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
+    return Card(
+                          color: Colors.amberAccent,
+                          child: ListTile(
+                            leading: Text(
+                              productList[index].productID,
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            title: Text(productList[index].productName),
+                            subtitle: Row(
+                              children: [
+                                decraseButton(productList, index, boxData),
+                                Text(productList[index].productNum.toString()),
+                                increaseButton(productList, index, boxData),
+
+                              ],
+                            ),
+                            trailing: IconButton(onPressed: (){
+                              boxData.deleteAt(index);
+                            }, icon: Icon(Icons.delete)),
+                          ),
+                        );
+  }
+
+  TextButton increaseButton(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
+    return TextButton(
+                                    onPressed: () {
+                                      print(productList[index].productNum);
+                                      productList[index].productNum++;
+                                      boxData.putAt(
+                                          index,
+                                          ProductModel(
+                                              productID:
+                                              productList[index].productID,
+                                              productName: productList[index].productName,
+                                              productNum: productList[index].productNum,
+                                              productDetail: productList[index].productDetail));                                },
+                                    child: Text(
+                                      '+',
+                                      style: TextStyle(fontSize: 25),
+                                    ));
+  }
+
+  TextButton decraseButton(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
+    return TextButton(
+                                    onPressed: () {
+                                     /* Provider.of<ProductViewModel>(context).increaseProductNum(productList[index]);*/
+                                      print(productList[index].productNum);
+                                      productList[index].productNum--;
+                                      boxData.putAt(
+                                          index,
+                                          ProductModel(
+                                              productID:
+                                                  productList[index].productID,
+                                              productName: productList[index].productName,
+                                              productNum: productList[index].productNum,
+                                              productDetail: productList[index].productDetail));
+                                    },
+                                    child: Text(
+                                      '-',
+                                      style: TextStyle(fontSize: 35),
+                                    ));
   }
 
   AppBar appBarWidget(BuildContext context) {
