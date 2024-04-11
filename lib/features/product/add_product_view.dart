@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:kartal/kartal.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:senotokuafor/features/product/product_model.dart';
 import 'package:senotokuafor/product/utility/constants/text_constant.dart';
 import 'package:senotokuafor/product/widgets/custom_text_form_field.dart';
@@ -46,6 +47,7 @@ class AddProductView extends StatelessWidget {
                 controller: productNumController,
                 title: TextConstant.numOfStock,
                 labelText: TextConstant.enterNum,
+                keyboardType: TextInputType.number
               ),
               context.sized.emptySizedHeightBoxLow,
               row(
@@ -64,9 +66,13 @@ class AddProductView extends StatelessWidget {
                           productName: productNameController.text,
                           productNum: int.parse(productNumController.text),
                           productDetail: productDetailController.text ?? ''));
+
+                      MotionToast.success(description: Text('Ürün eklendi')).show(context);
+
+                  }else{
+                    MotionToast.error(description: Text('Lütfen dikkat')).show(context);
                   }
                 }
-
 
 
               }, child: const Text(TextConstant.addProduct))
@@ -81,6 +87,7 @@ class AddProductView extends StatelessWidget {
     required TextEditingController controller,
     required String title,
     required String labelText,
+    TextInputType? keyboardType
   }) {
     return Row(
 
@@ -91,7 +98,9 @@ class AddProductView extends StatelessWidget {
         SizedBox(
             width: 200,
             child: CustomTextFormField(
-                controller: controller, labelText: '$title giriniz'))
+                controller: controller,
+                keyboardType: keyboardType,
+                labelText: '$title giriniz'))
       ],
     );
   }

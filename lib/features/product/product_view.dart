@@ -7,6 +7,7 @@ import 'package:senotokuafor/features/product/product_model.dart';
 import 'package:senotokuafor/features/product/product_view_model.dart';
 import 'package:senotokuafor/product/utility/constants/text_constant.dart';
 import '../../product/widgets/my_scaffold.dart';
+import '../../product/widgets/search_widget.dart';
 import 'add_product_view.dart';
 
 class ProductView extends StatelessWidget {
@@ -18,6 +19,13 @@ class ProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyScaffold(
         appBar: appBarWidget(context),
+        floatingActionButton: FloatingActionButton(onPressed: (){
+
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => AddProductView()));
+        },
+        child: const Icon(Icons.add),
+        ),
         child: ValueListenableBuilder(
             valueListenable:
                 Hive.box<ProductModel>(TextConstant.productBox).listenable(),
@@ -31,7 +39,7 @@ class ProductView extends StatelessWidget {
                 key: _key,
                 child: Column(
                   children: [
-                    TextFormField(
+                    /*TextFormField(
                       controller: searchController,
                       onChanged: (val){
                         if(val.isNotEmpty){
@@ -49,7 +57,7 @@ class ProductView extends StatelessWidget {
 
                       },
                     ),
-                    ListView.builder(
+ */                   ListView.builder(
                       shrinkWrap: true,
                         physics: ScrollPhysics(),
                         itemCount: productList.length,
@@ -131,11 +139,22 @@ class ProductView extends StatelessWidget {
       title: Text('Ürünler'),
       actions: [
         IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+              context: context,
+              delegate: SearchWidget(),
+            );
+          },
+        ),
+
+      ///yeni ürün ekleme butonunu floating action buttona taşıdım.
+      /*  IconButton(
             onPressed: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => AddProductView()));
             },
-            icon: const Icon(Icons.add_circle))
+            icon: const Icon(Icons.add_circle))*/
       ],
     );
   }
