@@ -24,60 +24,62 @@ class AddProductView extends StatelessWidget {
         ),
         child: Form(
           key: _key,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              row(
-                context: context,
-                controller: productCodeController,
-                title: TextConstant.productCode,
-                labelText: TextConstant.enterProductCode,
-              ),
-              context.sized.emptySizedHeightBoxLow,
-              row(
-                context: context,
-                controller: productNameController,
-                title: TextConstant.productName,
-                labelText: TextConstant.enterName,
-              ),
-              context.sized.emptySizedHeightBoxLow,
-              row(
-                context: context,
-                controller: productNumController,
-                title: TextConstant.numOfStock,
-                labelText: TextConstant.enterNum,
-                keyboardType: TextInputType.number
-              ),
-              context.sized.emptySizedHeightBoxLow,
-              row(
-                context: context,
-                controller: productDetailController,
-                title: TextConstant.productDetail,
-                labelText: TextConstant.enterDetail,
-              ),
-              context.sized.emptySizedHeightBoxNormal,
-              ElevatedButton(onPressed: () async {
-                if(_key.currentState!=null){
-                  if(_key.currentState!.validate()){
-                      await Hive.box<ProductModel>(TextConstant.productBox).put(
-                          productCodeController.text, ProductModel(
-                          productID: productCodeController.text,
-                          productName: productNameController.text,
-                          productNum: int.parse(productNumController.text),
-                          productDetail: productDetailController.text ?? ''));
-
-                      MotionToast.success(description: Text('Ürün eklendi')).show(context);
-
-                  }else{
-                    MotionToast.error(description: Text('Lütfen dikkat')).show(context);
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+            context.sized.emptySizedHeightBoxNormal,
+                row(
+                  context: context,
+                  controller: productCodeController,
+                  title: TextConstant.productCode,
+                  labelText: TextConstant.enterProductCode,
+                ),
+                context.sized.emptySizedHeightBoxLow,
+                row(
+                  context: context,
+                  controller: productNameController,
+                  title: TextConstant.productName,
+                  labelText: TextConstant.enterName,
+                ),
+                context.sized.emptySizedHeightBoxLow,
+                row(
+                  context: context,
+                  controller: productNumController,
+                  title: TextConstant.numOfStock,
+                  labelText: TextConstant.enterNum,
+                  keyboardType: TextInputType.number
+                ),
+                context.sized.emptySizedHeightBoxLow,
+                row(
+                  context: context,
+                  controller: productDetailController,
+                  title: TextConstant.productDetail,
+                  labelText: TextConstant.enterDetail,
+                ),
+                context.sized.emptySizedHeightBoxNormal,
+                ElevatedButton(onPressed: () async {
+                  if(_key.currentState!=null){
+                    if(_key.currentState!.validate()){
+                        await Hive.box<ProductModel>(TextConstant.productBox).put(
+                            productCodeController.text, ProductModel(
+                            productID: productCodeController.text,
+                            productName: productNameController.text,
+                            productNum: int.parse(productNumController.text),
+                            productDetail: productDetailController.text ?? ''));
+            
+                        MotionToast.success(description: Text('Ürün eklendi')).show(context);
+            
+                    }else{
+                      MotionToast.error(description: Text('Lütfen dikkat')).show(context);
+                    }
                   }
-                }
-
-
-              }, child: const Text(TextConstant.addProduct))
-
-            ],
+            
+            
+                }, child: const Text(TextConstant.addProduct))
+            
+              ],
+            ),
           ),
         ));
   }

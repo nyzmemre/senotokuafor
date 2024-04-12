@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kartal/kartal.dart';
@@ -15,7 +16,8 @@ class ProductView extends StatelessWidget {
    final _key=GlobalKey<FormState>();
   TextEditingController searchController = TextEditingController();
 
-  @override
+
+   @override
   Widget build(BuildContext context) {
     return MyScaffold(
         appBar: appBarWidget(context),
@@ -37,42 +39,44 @@ class ProductView extends StatelessWidget {
               }
               return Form(
                 key: _key,
-                child: Column(
-                  children: [
-                    /*TextFormField(
-                      controller: searchController,
-                      onChanged: (val){
-                        if(val.isNotEmpty){
-
-                           if(boxData.keys.any((element) => element==searchController.text)){
-                             ProductModel _result=boxData.get(searchController.text)!;
-                             productList=[ProductModel(productID: _result.productID, productName: _result.productName, productNum: _result.productNum, productDetail: _result.productDetail)];
-                           }else{
-                             productList=[];
-
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      /*TextFormField(
+                        controller: searchController,
+                        onChanged: (val){
+                          if(val.isNotEmpty){
+                  
+                             if(boxData.keys.any((element) => element==searchController.text)){
+                               ProductModel _result=boxData.get(searchController.text)!;
+                               productList=[ProductModel(productID: _result.productID, productName: _result.productName, productNum: _result.productNum, productDetail: _result.productDetail)];
+                             }else{
+                               productList=[];
+                  
+                            }
+                          } else {
+                            productList=boxData.values.cast<ProductModel>().toList();
                           }
-                        } else {
-                          productList=boxData.values.cast<ProductModel>().toList();
-                        }
-
-                      },
-                    ),
- */                   ListView.builder(
-                      shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemCount: productList.length,
-                        itemBuilder: (context, int index) {
-                          return cardWidget(productList, index, boxData);
-                        }),
-                  ],
+                  
+                        },
+                      ),
+                   */                   ListView.builder(
+                        shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          itemCount: productList.length,
+                          itemBuilder: (context, int index) {
+                            return cardWidget(productList, index, boxData);
+                          }),
+                    ],
+                  ),
                 ),
               );
             }));
   }
 
-  Card cardWidget(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
+  Widget cardWidget(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
     return Card(
-                          color: Colors.amberAccent,
+                          color: (productList[index].productNum != 0 ) ? Colors.amberAccent : Colors.redAccent,
                           child: ListTile(
                             leading: Text(
                               productList[index].productID,
@@ -118,7 +122,7 @@ class ProductView extends StatelessWidget {
                                     onPressed: () {
                                      /* Provider.of<ProductViewModel>(context).increaseProductNum(productList[index]);*/
                                       print(productList[index].productNum);
-                                      productList[index].productNum--;
+                                      (productList[index].productNum!=0) ?  productList[index].productNum-- : productList[index].productNum=productList[index].productNum;
                                       boxData.putAt(
                                           index,
                                           ProductModel(
