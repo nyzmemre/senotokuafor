@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kartal/kartal.dart';
 import 'package:provider/provider.dart';
+import 'package:senotokuafor/features/product/product_detail_view.dart';
 import 'package:senotokuafor/features/product/product_model.dart';
 import 'package:senotokuafor/features/product/product_view_model.dart';
 import 'package:senotokuafor/product/utility/constants/text_constant.dart';
@@ -21,8 +22,8 @@ class ProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyScaffold(
         appBar: appBarWidget(context),
-        floatingActionButton: FloatingActionButton(onPressed: (){
-
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
                 Navigator.push(
                     context, MaterialPageRoute(builder: (_) => AddProductView()));
         },
@@ -42,30 +43,12 @@ class ProductView extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      /*TextFormField(
-                        controller: searchController,
-                        onChanged: (val){
-                          if(val.isNotEmpty){
-                  
-                             if(boxData.keys.any((element) => element==searchController.text)){
-                               ProductModel _result=boxData.get(searchController.text)!;
-                               productList=[ProductModel(productID: _result.productID, productName: _result.productName, productNum: _result.productNum, productDetail: _result.productDetail)];
-                             }else{
-                               productList=[];
-                  
-                            }
-                          } else {
-                            productList=boxData.values.cast<ProductModel>().toList();
-                          }
-                  
-                        },
-                      ),
-                   */                   ListView.builder(
+                     ListView.builder(
                         shrinkWrap: true,
                           physics: ScrollPhysics(),
                           itemCount: productList.length,
                           itemBuilder: (context, int index) {
-                            return cardWidget(productList, index, boxData);
+                            return cardWidget(context, productList, index, boxData);
                           }),
                     ],
                   ),
@@ -74,28 +57,39 @@ class ProductView extends StatelessWidget {
             }));
   }
 
-  Widget cardWidget(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
-    return Card(
-                          color: (productList[index].productNum != 0 ) ? Colors.amberAccent : Colors.redAccent,
-                          child: ListTile(
-                            leading: Text(
-                              productList[index].productID,
-                              style: TextStyle(fontSize: 15),
+  Widget cardWidget(BuildContext context, List<ProductModel> productList, int index, Box<ProductModel> boxData) {
+    return Slidable(
+      endActionPane: ActionPane(motion: DrawerMotion(), children: [
+        SlidableAction(onPressed: (ctx){
+          boxData.deleteAt(index);
+        }, icon: Icons.delete,
+          backgroundColor: Colors.redAccent,
+          label: 'Sil',)
+      ]),
+      child: Card(
+                            color: (productList[index].productNum != 0 ) ? Colors.amberAccent : Colors.deepOrangeAccent,
+                            child: ListTile(
+                              leading: Text(
+                                productList[index].productID,
+                                style: TextStyle(fontSize: 15),
+                              ),
+                              title: Text(productList[index].productName),
+                              subtitle: Row(
+                                children: [
+                                  decraseButton(productList, index, boxData),
+                                  Text(productList[index].productNum.toString()),
+                                  increaseButton(productList, index, boxData),
+      
+                                ],
+                              ),
+                              trailing: TextButton(
+                                  onPressed: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ProductDetailView(item: productList[index]))),
+                                  child: Text('Detay'))/*IconButton(onPressed: (){
+                                boxData.deleteAt(index);
+                              }, icon: Icon(Icons.delete))*/,
                             ),
-                            title: Text(productList[index].productName),
-                            subtitle: Row(
-                              children: [
-                                decraseButton(productList, index, boxData),
-                                Text(productList[index].productNum.toString()),
-                                increaseButton(productList, index, boxData),
-
-                              ],
-                            ),
-                            trailing: IconButton(onPressed: (){
-                              boxData.deleteAt(index);
-                            }, icon: Icon(Icons.delete)),
                           ),
-                        );
+    );
   }
 
   TextButton increaseButton(List<ProductModel> productList, int index, Box<ProductModel> boxData) {
@@ -110,8 +104,9 @@ class ProductView extends StatelessWidget {
                                               productList[index].productID,
                                               productName: productList[index].productName,
                                               productNum: productList[index].productNum,
-                                              productDetail: productList[index].productDetail));                                },
-                                    child: Text(
+                                              productDetail: productList[index].productDetail,
+                                              dateTime: productList[index].dateTime));                                },
+                                    child: const Text(
                                       '+',
                                       style: TextStyle(fontSize: 25),
                                     ));
@@ -130,7 +125,8 @@ class ProductView extends StatelessWidget {
                                                   productList[index].productID,
                                               productName: productList[index].productName,
                                               productNum: productList[index].productNum,
-                                              productDetail: productList[index].productDetail));
+                                              productDetail: productList[index].productDetail,
+                                              dateTime: productList[index].dateTime));
                                     },
                                     child: Text(
                                       '-',

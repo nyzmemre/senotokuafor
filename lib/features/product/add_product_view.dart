@@ -66,9 +66,15 @@ class AddProductView extends StatelessWidget {
                             productID: productCodeController.text,
                             productName: productNameController.text,
                             productNum: int.parse(productNumController.text),
-                            productDetail: productDetailController.text ?? ''));
+                            productDetail: productDetailController.text ?? '',
+                            dateTime: DateTime.now()
+                        ));
             
                         MotionToast.success(description: Text('Ürün eklendi')).show(context);
+                        productCodeController.clear();
+                        productNameController.clear();
+                        productNumController.clear();
+                        productDetailController.clear();
             
                     }else{
                       MotionToast.error(description: Text('Lütfen dikkat')).show(context);

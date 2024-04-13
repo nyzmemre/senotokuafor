@@ -102,7 +102,9 @@ class SearchFinder extends StatelessWidget {
                   productList[index].productID,
                   productName: productList[index].productName,
                   productNum: productList[index].productNum,
-                  productDetail: productList[index].productDetail));                                },
+                  productDetail: productList[index].productDetail,
+                  dateTime: productList[index].dateTime
+              ));                                },
         child: Text(
           '+',
           style: TextStyle(fontSize: 25),
@@ -122,7 +124,8 @@ class SearchFinder extends StatelessWidget {
                   productList[index].productID,
                   productName: productList[index].productName,
                   productNum: productList[index].productNum,
-                  productDetail: productList[index].productDetail));
+                  productDetail: productList[index].productDetail,
+                  dateTime: productList[index].dateTime));
         },
         child: Text(
           '-',
